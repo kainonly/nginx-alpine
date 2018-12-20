@@ -96,3 +96,5 @@ modules.xml
 *.ipr
 
 # End of https://www.gitignore.io/api/jetbrains+all
+vendor
+glide.lock
