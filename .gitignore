@@ -97,4 +97,4 @@ modules.xml
 
 # End of https://www.gitignore.io/api/jetbrains+all
 vendor
-glide.lock
+go.sum
