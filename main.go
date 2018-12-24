@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gopkg.in/go-oauth2/redis.v3"
 	"gopkg.in/oauth2.v3/errors"
 	"gopkg.in/oauth2.v3/manage"
 	"gopkg.in/oauth2.v3/models"
@@ -12,17 +13,20 @@ import (
 
 func main() {
 	manager := manage.NewDefaultManager()
-	// token memory store
 	manager.MustTokenStorage(store.NewMemoryTokenStore())
-
-	// client memory store
 	clientStore := store.NewClientStore()
 	clientStore.Set("000000", &models.Client{
 		ID:     "000000",
 		Secret: "999999",
-		Domain: "http://localhost",
+		Domain: "*",
 	})
+
 	manager.MapClientStorage(clientStore)
+	//manager.MapAccessGenerate(generates.NewJWTAccessGenerate([]byte("00000000"), jwt.SigningMethodHS512))
+	manager.MapTokenStorage(redis.NewRedisStore(&redis.Options{
+		Addr: "127.0.0.1:6379",
+		DB:   0,
+	}))
 
 	srv := server.NewDefaultServer(manager)
 	srv.SetAllowGetAccessRequest(true)
@@ -45,7 +49,10 @@ func main() {
 	})
 
 	http.HandleFunc("/token", func(w http.ResponseWriter, r *http.Request) {
-		srv.HandleTokenRequest(w, r)
+		err := srv.HandleTokenRequest(w, r)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		}
 	})
 
 	log.Fatal(http.ListenAndServe(":9096", nil))
