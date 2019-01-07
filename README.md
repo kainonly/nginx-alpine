@@ -5,7 +5,13 @@ Nginx's minimalist custom image
 - size `6.71` mb
 - version `1.14.2`
 
-set docker-compose
+Docker Pull Command
+
+```shell
+docker pull kainonly/nginx-alpine
+```
+
+Set docker-compose
 
 ```yaml
 version: '3'
