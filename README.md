@@ -1,9 +1,6 @@
 ## Nginx-Alpine
 
-Nginx's minimalist custom image
-
-- size `6.71` mb
-- version `1.14.2`
+Nginx's custom image
 
 Docker Pull Command
 
