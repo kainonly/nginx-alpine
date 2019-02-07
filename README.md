@@ -11,10 +11,10 @@ docker pull kainonly/nginx-alpine
 Set docker-compose
 
 ```yaml
-version: '3'
+version: '3.7'
 services:
   nginx:
-    image: kainonly/nginx-alpine:1.14.2
+    image: kainonly/nginx-alpine:1.15.8
     restart: always
     volumes:
       - ./nginx/vhost:/etc/nginx/vhost
