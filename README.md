@@ -5,7 +5,7 @@ Nginx's custom image
 Docker Pull Command
 
 ```shell
-docker pull kainonly/nginx-alpine
+docker pull kainonly/nginx-alpine:1.15.9
 ```
 
 Set docker-compose
@@ -14,7 +14,7 @@ Set docker-compose
 version: '3.7'
 services:
   nginx:
-    image: kainonly/nginx-alpine:1.15.8
+    image: kainonly/nginx-alpine:1.15.9
     restart: always
     volumes:
       - ./nginx/vhost:/etc/nginx/vhost
