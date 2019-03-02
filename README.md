@@ -1,11 +1,9 @@
 ## Nginx-Alpine
 
-Nginx's custom image
-
 Docker Pull Command
 
 ```shell
-docker pull kainonly/nginx-alpine:1.15.9
+docker pull kainonly/nginx-alpine
 ```
 
 Set docker-compose
@@ -14,7 +12,7 @@ Set docker-compose
 version: '3.7'
 services:
   nginx:
-    image: kainonly/nginx-alpine:1.15.9
+    image: kainonly/nginx-alpine
     restart: always
     volumes:
       - ./nginx/vhost:/etc/nginx/vhost
@@ -27,6 +25,7 @@ services:
 
 volumes
 
+- `/etc/nginx/nginx.conf` Main Config
 - `/etc/nginx/vhost` Virtual domain name setting directory
 - `/var/nginx` Nginx's log
 - `/website` Virtual directory
