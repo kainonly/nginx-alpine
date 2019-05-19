@@ -47,7 +47,7 @@ pid /var/run/nginx.pid;
 lock_file /var/run/nginx.lock;
 
 events {
-    worker_connections 4096; 
+    worker_connections 1024; 
     accept_mutex off;
 }
 
