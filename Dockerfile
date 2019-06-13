@@ -1,5 +1,5 @@
-FROM nginx:alpine
+FROM nginx:1.17-alpine
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-VOLUME /etc/nginx/vhost /var/log/nginx
+VOLUME /etc/nginx/vhost

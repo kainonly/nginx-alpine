@@ -20,10 +20,26 @@ services:
   nginx:
     image: kainonly/nginx-alpine
     restart: always
+    privileged: true
+    sysctls:
+      net.ipv4.ip_forward: 0
+      net.ipv4.conf.default.rp_filter: 1
+      net.ipv4.conf.default.accept_source_route: 0
+      net.ipv4.tcp_syncookies: 1
+      kernel.msgmnb: 65536
+      kernel.msgmax: 65536
+      kernel.shmmax: 68719476736
+      kernel.shmall: 4294967296
+      net.core.somaxconn: 40960
+      net.ipv4.tcp_synack_retries: 1
+      net.ipv4.tcp_syn_retries: 1
+      net.ipv4.tcp_fin_timeout: 1
+      net.ipv4.tcp_keepalive_time: 30
+      net.ipv4.ip_local_port_range: 1024 65000
     volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/vhost:/etc/nginx/vhost
-      - /var/nginx/log:/var/nginx
-      - /website:/website
+      - ./nginx/logs:/var/nginx
     ports:
       - 80:80
       - 443:443
