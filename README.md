@@ -48,7 +48,7 @@ services:
 ## Volumes
 
 - `/etc/nginx/nginx.conf` nginx.conf
-- `/etc/nginx/vhost` Virtual Config
+- `/etc/nginx/vhost` Virtual
 - `/var/nginx` Nginx Var
 
 ## Default nginx.conf
@@ -136,5 +136,43 @@ http {
     }
 
     include vhost/**/*.conf;
+}
+```
+
+## Example Virtual
+
+create `./nginx/vhost/developer.com/site.conf`
+
+```conf
+server {
+	listen  80;
+	server_name developer.com;
+	rewrite ^(.*)$  https://$host$1 permanent;
+}
+
+server {
+	listen 443 ssl http2;
+	server_name developer.com;
+	 
+	http2_body_preread_size 128k;
+	http2_chunk_size 16k;
+	ssl_certificate vhost/developer.com/site.crt;
+	ssl_certificate_key vhost/developer.com/site.key;
+	ssl_session_cache shared:SSL:20m;
+	ssl_session_timeout 10m;
+	ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+	ssl_prefer_server_ciphers on;
+	ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+	 
+	location / {
+		aio threads=default;
+		proxy_pass http://10.0.75.1:3000/;
+		proxy_redirect    off;
+		proxy_set_header  X-Forwarded-For $remote_addr;
+	}
+
+	location ~* .(jpg|jpeg|png|gif|ico|css|js)$ {
+		expires 365d;
+	}
 }
 ```
