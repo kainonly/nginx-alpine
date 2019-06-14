@@ -14,7 +14,7 @@ docker pull kainonly/nginx-alpine
 
 ## Docker Compose
 
-```yaml
+```yml
 version: '3.7'
 services:
   nginx:
@@ -30,7 +30,7 @@ services:
       kernel.msgmax: 65536
       kernel.shmmax: 68719476736
       kernel.shmall: 4294967296
-      net.core.somaxconn: 40960
+      net.core.somaxconn: 65535
       net.ipv4.tcp_synack_retries: 1
       net.ipv4.tcp_syn_retries: 1
       net.ipv4.tcp_fin_timeout: 1
