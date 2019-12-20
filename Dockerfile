@@ -2,8 +2,6 @@ FROM alpine:edge as development
 
 ENV NGINX_VERSION 1.17.6
 
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-
 RUN addgroup -g 82 -S nginx \
     && adduser -S -D -H -u 82 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx \
     && mkdir -p /var/cache/nginx \
@@ -92,8 +90,6 @@ FROM alpine:1.11
 
 COPY --from=development /etc/nginx /etc/nginx
 COPY --from=development /usr/sbin/nginx /usr/sbin/nginx
-
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 RUN apk --no-cache add \
     tzdata \
