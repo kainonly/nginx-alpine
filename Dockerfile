@@ -17,8 +17,11 @@ RUN apk add --no-cache --virtual .build-deps \
     cmake \
     autoconf \
     automake \
+    zlib \
     zlib-dev \
+    pcre \
     pcre-dev \
+    openssl \
     openssl-dev \
     gnupg \
     curl \
@@ -86,12 +89,14 @@ RUN apk add --no-cache --virtual .build-deps \
     && rm -rf /etc/nginx/html /src /nginx.tar.gz /nginx.tar.gz.asc \
     && apk del .build-deps
 
-FROM alpine:1.11
+FROM alpine:3.10
 
 COPY --from=development /etc/nginx /etc/nginx
 COPY --from=development /usr/sbin/nginx /usr/sbin/nginx
 
 RUN apk --no-cache add \
+    libgcc \
+    pcre \
     tzdata \
     && addgroup -g 82 -S nginx \
     && adduser -S -D -H -u 82 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx \
