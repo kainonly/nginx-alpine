@@ -2,11 +2,14 @@ FROM alpine:edge as development
 
 ENV NGINX_VERSION 1.17.6
 
-RUN addgroup -g 82 -S nginx \
-    && adduser -S -D -H -u 82 -h /var/cache/nginx -s /sbin/nologin -G nginx -g nginx nginx \
-    && mkdir -p /var/cache/nginx \
-    && chown -R nginx:nginx /var/cache/nginx \
-    && apk add --no-cache --virtual .build-deps \
+RUN apk add --no-cache --virtual .clone-quiche \
+    git \
+    && mkdir -p /src \
+    && cd /src \
+    && git clone --recursive https://github.com/cloudflare/quiche \
+    && apk del .clone-quiche
+
+RUN apk add --no-cache --virtual .build-deps \
     linux-headers \
     gcc \
     g++ \
@@ -19,7 +22,6 @@ RUN addgroup -g 82 -S nginx \
     openssl-dev \
     gnupg \
     curl \
-    git \
     patch \
     perl \
     libunwind-dev \
@@ -29,9 +31,7 @@ RUN addgroup -g 82 -S nginx \
     && curl -fSL https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc -o nginx.tar.gz.asc \
     && gpg --keyserver hkp://pgp.key-server.io --recv-keys 520A9993A1C052F8 \
     && gpg --verify nginx.tar.gz.asc \
-    && mkdir -p /src \
     && tar -xvzf nginx.tar.gz -C /src \
-    && git clone --recursive https://github.com/cloudflare/quiche \
     && cd /src/nginx-${NGINX_VERSION} \
     && patch -p01 < ../quiche/extras/nginx/nginx-1.16.patch \
     && ./configure \
