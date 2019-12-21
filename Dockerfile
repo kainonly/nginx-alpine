@@ -6,7 +6,7 @@ RUN apk add --no-cache \
     git \
     && mkdir -p /src \
     && cd /src \
-    && git clone --recursive https://github.com/cloudflare/quiche
+    && git clone --recursive https://github.com/google/ngx_brotli.git
 
 RUN apk add --no-cache --virtual .build-deps \
     linux-headers \
@@ -16,29 +16,19 @@ RUN apk add --no-cache --virtual .build-deps \
     cmake \
     autoconf \
     automake \
-    zlib \
     zlib-dev \
-    pcre \
     pcre-dev \
-    openssl \
     openssl-dev \
     gnupg \
     curl \
-    patch \
-    perl \
-    libunwind-dev \
-    go \
-    cargo \
     && curl -fSL https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -o nginx.tar.gz \
     && curl -fSL https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc -o nginx.tar.gz.asc \
     && gpg --keyserver hkp://pgp.key-server.io --recv-keys 520A9993A1C052F8 \
     && gpg --verify nginx.tar.gz.asc \
     && tar -xvzf nginx.tar.gz -C /src \
     && cd /src/nginx-${NGINX_VERSION} \
-    && patch -p01 < ../quiche/extras/nginx/nginx-1.16.patch \
     && ./configure \
     --prefix=/etc/nginx \
-    --build="quiche-$(git --git-dir=../quiche/.git rev-parse --short HEAD)" \
     --sbin-path=/usr/sbin/nginx \
     --modules-path=/usr/lib/nginx/modules \
     --conf-path=/etc/nginx/nginx.conf \
@@ -72,9 +62,6 @@ RUN apk add --no-cache --virtual .build-deps \
     --with-http_stub_status_module \
     --with-http_sub_module \
     --with-http_v2_module \
-    --with-http_v3_module \
-    --with-openssl=../quiche/deps/boringssl \
-    --with-quiche=../quiche \
     --with-mail \
     --with-mail_ssl_module \
     --with-stream \
@@ -83,6 +70,7 @@ RUN apk add --no-cache --virtual .build-deps \
     --with-stream_ssl_preread_module \
     --with-cc-opt='-Os -fomit-frame-pointer' \
     --with-ld-opt=-Wl,--as-needed \
+    --add-module=/src/ngx_brotli \
     && make && make install \
     && mkdir -p /etc/nginx/vhost \
     && rm -rf /etc/nginx/html /src /nginx.tar.gz /nginx.tar.gz.asc \
