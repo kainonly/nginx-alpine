@@ -29,8 +29,8 @@ RUN apk add --no-cache --virtual .build-deps \
     libunwind-dev \
     go \
     cargo \
-    && curl -fSL -x https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -o nginx.tar.gz \
-    && curl -fSL -x https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc -o nginx.tar.gz.asc \
+    && curl -fSL https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -o nginx.tar.gz \
+    && curl -fSL https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc -o nginx.tar.gz.asc \
     && gpg --keyserver hkp://pgp.key-server.io --recv-keys 520A9993A1C052F8 \
     && gpg --verify nginx.tar.gz.asc \
     && tar -xvzf nginx.tar.gz -C /src \
