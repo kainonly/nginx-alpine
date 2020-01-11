@@ -23,7 +23,7 @@ RUN apk add --no-cache --virtual .build-deps \
     curl \
     && curl -fSL https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -o nginx.tar.gz \
     && curl -fSL https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc -o nginx.tar.gz.asc \
-    && gpg --keyserver hkp://pgp.key-server.io --recv-keys 520A9993A1C052F8 \
+    && gpg --keyserver hkp://pgp.mit.edu --recv-keys 520A9993A1C052F8 \
     && gpg --verify nginx.tar.gz.asc \
     && tar -xvzf nginx.tar.gz -C /src \
     && cd /src/nginx-${NGINX_VERSION} \
