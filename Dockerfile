@@ -76,12 +76,14 @@ RUN apk add --no-cache --virtual .build-deps \
     && rm -rf /etc/nginx/html /src /nginx.tar.gz /nginx.tar.gz.asc \
     && apk del .build-deps
 
-FROM alpine:3.10
+FROM alpine:edge
 
 COPY --from=development /etc/nginx /etc/nginx
 COPY --from=development /usr/sbin/nginx /usr/sbin/nginx
 
 RUN apk --no-cache add \
+    certbot \
+    certbot-nginx \
     libgcc \
     pcre \
     tzdata \
