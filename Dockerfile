@@ -82,8 +82,6 @@ COPY --from=development /etc/nginx /etc/nginx
 COPY --from=development /usr/sbin/nginx /usr/sbin/nginx
 
 RUN apk --no-cache add \
-    certbot \
-    certbot-nginx \
     libgcc \
     pcre \
     tzdata \
