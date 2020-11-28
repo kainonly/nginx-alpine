@@ -15,7 +15,7 @@ docker pull kainonly/nginx-alpine
 ## Docker Compose
 
 ```yml
-version: '3.7'
+version: '3.8'
 services:
   nginx:
     image: kainonly/nginx-alpine
