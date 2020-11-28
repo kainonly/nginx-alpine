@@ -5,8 +5,7 @@ Quick and Easy Nginx Image
 ![MicroBadger Size](https://img.shields.io/microbadger/image-size/kainonly/nginx-alpine.svg?style=flat-square)
 ![MicroBadger Layers](https://img.shields.io/microbadger/layers/kainonly/nginx-alpine.svg?style=flat-square)
 ![Docker Pulls](https://img.shields.io/docker/pulls/kainonly/nginx-alpine.svg?style=flat-square)
-![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/kainonly/nginx-alpine.svg?style=flat-square)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/kainonly/nginx-alpine.svg?style=flat-square)
+[![Github Actions](https://img.shields.io/github/workflow/status/docker-maker/nginx-alpine/release?style=flat-square)](https://github.com/docker-marker/nginx-alpine/actions)
 
 ```shell
 docker pull kainonly/nginx-alpine
@@ -45,14 +44,11 @@ services:
 ```conf
 user nginx nginx;
 
-# worker_processes 8;
-# worker_cpu_affinity 00000001 00000010 00000100 00001000 00010000 00100000 01000000 10000000;
 worker_processes auto;
 worker_rlimit_nofile 65535;
 
 pid /var/run/nginx.pid;
 lock_file /var/run/nginx.lock;
-# thread_pool default threads=16;
 
 events {
   use epoll;
@@ -67,7 +63,7 @@ http {
   default_type application/octet-stream;
 
   log_format main $remote_addr - $remote_user [$time_local] "$request"  $status $body_bytes_sent "$http_referer"  "$http_user_agent" "$http_x_forwarded_for";
-  error_log /var/log/nginx/error.log info;
+  error_log /var/log/nginx/error.log crit;
   access_log off;
 
   server_tokens off;
@@ -150,14 +146,9 @@ server {
   add_header X-XSS-Protection "1; mode=block";
   add_header X-Content-Type-Options "nosniff";
 
-  ssl_certificate vhost/developer.com/site.crt;
-  ssl_certificate_key vhost/developer.com/site.key;
-  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
-  ssl_ciphers TLS13-AES-256-GCM-SHA384:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-128-CCM-8-SHA256:TLS13-AES-128-CCM-SHA256:EECDH+CHACHA20:EECDH+CHACHA20-draft:EECDH+ECDSA+AES128:EECDH+aRSA+AES128:RSA+AES128:EECDH+ECDSA+AES256:EECDH+aRSA+AES256:RSA+AES256:EECDH+ECDSA+3DES:EECDH+aRSA+3DES:RSA+3DES:!MD5;
-  ssl_prefer_server_ciphers on;
-  ssl_session_cache shared:SSL:10m;
-  ssl_session_timeout 10m;
-  ssl_early_data on;
+  ssl_certificate vhost/<......>/site.crt;
+  ssl_certificate_key vhost/<......>/site.key;
+  ssl_protocols TLSv1.2 TLSv1.3;
 
   location / {
     try_files $uri $uri/ /index.php?$query_string;
@@ -170,10 +161,6 @@ server {
   location ~ /\.(?!well-known).* {
     deny all;
   }
-
-  location ~* .(jpg|jpeg|png|gif|ico|css|js)$ {
-    expires 365d;
-  } 
 
   error_page 404 /index.php;
 
