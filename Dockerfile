@@ -1,6 +1,6 @@
 FROM alpine:edge as development
 
-ENV NGINX_VERSION 1.19.5
+ENV NGINX_VERSION 1.19.6
 
 RUN apk add --no-cache \
     git \
