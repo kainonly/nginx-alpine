@@ -120,7 +120,7 @@ http {
 
   server {
     listen 80 default;
-    return 404;
+    return 444;
   }
 
   include vhost/**/*.conf;
